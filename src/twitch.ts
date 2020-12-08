@@ -45,6 +45,7 @@ class Twitch {
     })
 
     const api = new ApiClient({ authProvider })
+    const me = await api.helix.users.getMe()
 
     for (const channel of await (await api.kraken.teams.getTeamByName('sad_inside')).getUsers()) {
       const c = await this.channelRepository.findOne(channel.id) || this.channelRepository.create({ id: channel.id })
@@ -52,6 +53,7 @@ class Twitch {
       await c.save()
 
       this.channels.push(c)
+      api.helix.users.createFollow(me.id, c.id)
     }
 
     this.bot = new Bot(api as any, {
@@ -68,12 +70,15 @@ class Twitch {
   private async pullChannels() {
     this.intervals.channels = setTimeout(() => this.pullChannels(), 5 * 60 * 1000)
     const channels = await (await this.bot.api.kraken.teams.getTeamByName(process.env.TWITCH_TEAMNAME)).getUsers()
+    const me = await this.bot.api.helix.users.getMe()
+
     for (const channel of channels) {
       if (this.channels.find(c => c.id === channel.id)) continue
       const newChannel = this.channelRepository.create({ id: channel.id, username: channel.name })
       await newChannel.save()
       this.channels.push(newChannel)
       this.bot.chat.join(channel.name)
+      this.bot.api.helix.users.createFollow(me.id, channel.id)
     }
 
     const noMoreInGroup = this.channels.filter(channel => {
