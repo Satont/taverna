@@ -3,9 +3,11 @@ import { getRepository } from 'typeorm'
 import { Channel } from '../entities/Channel'
 import dayjs from 'dayjs'
 import twitch from '../twitch'
-import { sampleSize, take } from 'lodash'
+import { take } from 'lodash'
 
 export default createBotCommand('raid', async (params, context) => {
+  if (context.msg.userInfo.userName.toLowerCase() !== context.channel.toLowerCase()) return
+
   const online = await twitch.bot.api.helix.streams.getStreamsPaginated({
     userId: twitch.channels.map(c => c.id),
   }).getAll()
