@@ -6,7 +6,7 @@ import twitch from '../twitch'
 import { take } from 'lodash'
 
 export default createBotCommand('raid', async (params, context) => {
-  if (context.msg.userInfo.userName !== context.channel.replace('#', '').toLowerCase()) return
+  if (!twitch.channels.some(c => c.id === context.msg.userInfo.userId)) return
 
   const online = await twitch.bot.api.helix.streams.getStreamsPaginated({
     userId: twitch.channels.map(c => c.id),
