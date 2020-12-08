@@ -39,7 +39,7 @@ export default createBotCommand('raid', async (params, context) => {
 
   for (const suggestion of suggestions) {
     const channel = channels.find(c => c.id === suggestion.userId)
-    const message = `${channel.username}(${(await suggestion.getGame()).name}) 👁️ ${suggestion.viewers} 📢 ${channel.raided}`
+    const message = `${channel.username} 🎮 ${(await suggestion.getGame()).name} 👁️ ${suggestion.viewers} 📢 ${channel.raided}`
     result.push(message)
   }
 

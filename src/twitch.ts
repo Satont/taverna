@@ -60,7 +60,8 @@ class Twitch {
       channels: this.channels.map(c => c.username),
       commands: [
         (await import('./commands/raid')).default,
-        (await import('./commands/stats')).default
+        (await import('./commands/stats')).default,
+        (await import('./commands/online')).default
       ]
     })
 
