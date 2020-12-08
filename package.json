@@ -1,0 +1,40 @@
+{
+  "name": "sadinsidebot",
+  "version": "1.0.0",
+  "description": "Bot for SAD INSIDE twitch community",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon",
+    "prestart": "npm run migration:up",
+    "migration:create": "typeorm migration:generate -p -n",
+    "migration:up": "typeorm migration:run"
+  },
+  "author": "Satont <satontworldwide@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/source-map-support": "^0.5.3",
+    "axios": "^0.21.0",
+    "dayjs": "^1.9.7",
+    "dotenv": "^8.2.0",
+    "easy-twitch-bot": "^4.3.5",
+    "lodash": "^4.17.20",
+    "pg": "^8.5.1",
+    "reflect-metadata": "^0.1.13",
+    "source-map-support": "^0.5.19",
+    "twitch": "^4.3.5",
+    "twitch-auth": "^4.3.5",
+    "twitch-chat-client": "^4.3.5",
+    "typeorm": "^0.2.29"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.165",
+    "@types/node": "^14.14.10",
+    "nodemon": "^2.0.6",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.1.2"
+  }
+}
