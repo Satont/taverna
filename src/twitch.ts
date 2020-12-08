@@ -1,10 +1,15 @@
 import { RefreshableAuthProvider, StaticAuthProvider } from 'twitch-auth'
 import { ApiClient } from 'twitch'
 import { getRepository } from 'typeorm'
+import gl from 'glob'
+import { Bot, BotCommand } from 'easy-twitch-bot'
+
 import { Token, TokenType } from './entities/Token'
 import { Channel } from './entities/Channel'
-import { Bot } from 'easy-twitch-bot'
 import { Raid } from './entities/Raid'
+import { promisify } from 'util'
+import { resolve } from 'path'
+import { readdirSync } from 'fs'
 
 class Twitch {
   private readonly tokenRepository = getRepository(Token)
@@ -22,6 +27,7 @@ class Twitch {
   }
 
   private async init() {
+    this.getCommands()
     const clientId = process.env.TWITCH_CLIENTID
     const clientSecret = process.env.TWITCH_CLIENTSECRET
 
@@ -58,11 +64,7 @@ class Twitch {
 
     this.bot = new Bot(api as any, {
       channels: this.channels.map(c => c.username),
-      commands: [
-        (await import('./commands/raid')).default,
-        (await import('./commands/stats')).default,
-        (await import('./commands/online')).default
-      ]
+      commands: await this.getCommands()
     })
 
     this.loadListeners()
@@ -127,6 +129,19 @@ class Twitch {
 
       this.raidsRepository.create({ to, from }).save()
     })
+  }
+
+  private async getCommands() {
+    const glob = promisify(gl)
+    const files = await glob(resolve(process.cwd(), 'dist', 'commands') + '/**.js')
+    const commands: BotCommand[] = []
+
+    for (const file of files) {
+      const imported: BotCommand = (await import(file)).default
+      commands.push(imported)
+    }
+
+    return commands
   }
 }
 
