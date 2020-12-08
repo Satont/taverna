@@ -20,6 +20,6 @@ export default createBotCommand('stats', async (params, context) => {
   })
 
   const raidedString = `Этот канал рейдили ${channel.raided.length} раз${todayRaided.length ? `, из них сегодня: ${todayRaided.length}` : '.'}`
-  const raidsString = `Сам @${context.channel.replace('#', '')} рейдил ${channel.raids.length} раз${todayRaids.length ? `, из них сегодня: ${todayRaids.length}` : '.'}`
+  const raidsString = `Рейдов от @${context.channel.replace('#', '')} было ${channel.raids.length}${todayRaids.length ? `, из них сегодня: ${todayRaids.length}` : '.'}`
   context.say(`${raidedString} ${raidsString}`)
 })
