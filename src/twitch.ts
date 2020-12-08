@@ -59,7 +59,8 @@ class Twitch {
     this.bot = new Bot(api as any, {
       channels: this.channels.map(c => c.username),
       commands: [
-        (await import('./commands/raid')).default
+        (await import('./commands/raid')).default,
+        (await import('./commands/stats')).default
       ]
     })
 

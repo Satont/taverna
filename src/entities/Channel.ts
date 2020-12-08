@@ -10,5 +10,8 @@ export class Channel extends BaseEntity {
   username!: string
 
   @OneToMany(() => Raid, raid => raid.to)
-  todayRaided: Raid[]
+  raided: Raid[]
+
+  @OneToMany(() => Raid, raid => raid.from)
+  raids: Raid[]
 }
