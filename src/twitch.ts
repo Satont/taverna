@@ -82,6 +82,7 @@ class Twitch {
 
     for (const channel of noMoreInGroup) {
       this.channels = this.channels.filter(c => c.id !== channel.id)
+      this.bot.chat.part(channel.username)
       await channel.remove()
     }
   }
