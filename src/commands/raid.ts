@@ -3,7 +3,7 @@ import { getRepository } from 'typeorm'
 import { Channel } from '../entities/Channel'
 import dayjs from 'dayjs'
 import twitch from '../twitch'
-import { sampleSize } from 'lodash'
+import { sampleSize, take } from 'lodash'
 
 export default createBotCommand('raid', async (params, context) => {
   const online = await twitch.bot.api.helix.streams.getStreamsPaginated({
@@ -30,15 +30,17 @@ export default createBotCommand('raid', async (params, context) => {
     .execute()
 
 
-  const suggestions = sampleSize(channels, 3)
-
   const result: string[] = []
 
+  const suggestions = online
+    .filter(s => channels.some(c => c.id === s.userId))
+    .sort((a, b) => Number(a.viewers) - Number(b.viewers))
+
   for (const suggestion of suggestions) {
-    const stream = online.find(c => c.userId === suggestion.id)
-    const message = `${suggestion.username}(${(await stream.getGame()).name}) 👁️ ${stream.viewers} 📢 ${suggestion.raided}`
+    const channel = channels.find(c => c.id === suggestion.userId)
+    const message = `${channel.username}(${(await suggestion.getGame()).name}) 👁️ ${suggestion.viewers} 📢 ${channel.raided}`
     result.push(message)
   }
 
-  context.say(`Предлагаю зарейдить: ${result.join(' или ')}.`)
+  context.say(`Предлагаю зарейдить: ${take(result, 5).join(' или ')}.`)
 })
