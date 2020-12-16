@@ -13,3 +13,6 @@ async function bootstrap() {
 }
 
 bootstrap()
+
+process.on('unhandledRejection', (reason) => console.error(reason))
+process.on('uncaughtException', (reason) => console.error(reason))
