@@ -8,8 +8,7 @@ export default new class extends BotCommand {
     if (!twitch.channels.some(c => c.id === context.msg.userInfo.userId)) return
 
     const channels = (await twitch.bot.api.kraken.streams
-      .getStreams(twitch.channels.map(c => c.id)))
-      .filter(c => c.channel.id !== context.msg.channelId)
+      .getStreams(twitch.channels.map(c => c.id).filter(id => id !== context.msg.channelId)))
       .sort((a, b) => a.viewers - b.viewers)
 
     const channelsArray = channels.map(c => `${c.channel.name} 🎮 ${c.game} 👁️ ${c.viewers}`)
