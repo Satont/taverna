@@ -9,10 +9,12 @@ export default new class extends BotCommand {
 
   async execute(params: string[], context: BotCommandContext) {
     if (!twitch.channels.some(c => c.id === context.msg.userInfo.userId)) return
+
     const channel = await getRepository(Channel)
       .findOne(context.msg.channelId, {
         relations: ['raided', 'raids']
       })
+
     const todayRaided = channel.raided.filter(raid => {
       const date = dayjs(raid.createdAt)
       return date > dayjs().startOf('day') && date < dayjs().endOf('day')

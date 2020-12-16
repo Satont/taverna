@@ -11,9 +11,11 @@ export default new class extends BotCommand {
   async execute(params: string[], context: BotCommandContext) {
     if (!twitch.channels.some(c => c.id === context.msg.userInfo.userId)) return
 
-    const online = await twitch.bot.api.helix.streams.getStreamsPaginated({
+    const online = (await twitch.bot.api.helix.streams.getStreamsPaginated({
       userId: twitch.channels.map(c => c.id),
-    }).getAll()
+    })
+      .getAll())
+      .filter(c => c.userId !== context.msg.channelId)
 
     const channels: Array<{ id: string, username: string, raided: string }> = await getRepository(Channel)
       .createQueryBuilder('channel')
