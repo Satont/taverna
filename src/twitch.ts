@@ -9,7 +9,6 @@ import { Channel } from './entities/Channel'
 import { Raid } from './entities/Raid'
 import { promisify } from 'util'
 import { resolve } from 'path'
-import { readdirSync } from 'fs'
 
 class Twitch {
   private readonly tokenRepository = getRepository(Token)

@@ -14,5 +14,5 @@ async function bootstrap() {
 
 bootstrap()
 
-process.on('unhandledRejection', (reason) => console.error(reason))
+process.on('unhandledRejection', (reason, promise) => console.error(reason, promise))
 process.on('uncaughtException', (reason) => console.error(reason))
