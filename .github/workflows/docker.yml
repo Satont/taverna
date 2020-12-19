@@ -23,3 +23,12 @@ jobs:
           IMAGE_NAME: "satont/tavernabot"
           TAG_NAME: ${{ github.sha }}
           LATEST: "true"
+      - name: Build & Push to GitLab Package as latest
+        uses: opspresso/action-docker@v0.2.8
+        env:
+          USERNAME: ${{ secrets.GITLAB_DOCKER_USERNAME }}
+          PASSWORD: ${{ secrets.GITLAB_DOCKER_PASSWORD }}
+          REGISTRY: registry.gitlab.com
+          IMAGE_NAME: "satont/tavernabot"
+          TAG_NAME: ${{ github.sha }}
+          LATEST: "true"
