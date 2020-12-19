@@ -66,7 +66,8 @@ class Twitch {
 
     this.bot = new Bot(api as any, {
       channels: this.channels.map(c => c.username),
-      commands: await this.getCommands()
+      commands: await this.getCommands(),
+      prefix: process.env.BOT_PREFIX || 't!',
     })
 
     this.loadListeners()
