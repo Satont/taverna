@@ -1,0 +1,15 @@
+import { ChatRaidInfo, UserNotice } from 'twitch-chat-client/lib'
+import { getRepository } from 'typeorm'
+import twitch from '..'
+import { Raid } from '../../entities/Raid'
+
+const raidRepository = getRepository(Raid)
+
+export const onRaid = (channel: string, user: string, raidinfo: ChatRaidInfo, msg: UserNotice) => {
+  const to = twitch.channels.find(c => c.id === msg.tags.get('room-id'))
+  const from = twitch.channels.find(c => c.id === msg.tags.get('user-id'))
+
+  if (!from || !to) return
+
+  raidRepository.create({ to, from }).save()
+}

@@ -4,11 +4,14 @@ import { getRepository } from 'typeorm'
 import gl from 'glob'
 import { Bot, BotCommand } from 'easy-twitch-bot'
 
-import { Token, TokenType } from './entities/Token'
-import { Channel } from './entities/Channel'
-import { Raid } from './entities/Raid'
+import { Token, TokenType } from '../entities/Token'
+import { Channel } from '../entities/Channel'
+import { Raid } from '../entities/Raid'
 import { promisify } from 'util'
 import { resolve } from 'path'
+import { onJoin } from './listeners/onJoin'
+import { onRaid } from './listeners/onRaid'
+import { onMessage } from './listeners/onMessage'
 
 class Twitch {
   private readonly tokenRepository = getRepository(Token)
@@ -68,6 +71,8 @@ class Twitch {
 
     this.loadListeners()
     this.pullChannels()
+
+    import('./modules/updateOnline')
   }
 
   private async pullChannels() {
@@ -96,38 +101,9 @@ class Twitch {
   }
 
   private async loadListeners() {
-    this.bot.chat.onJoin((channel) => console.info(`Joined ${channel}`))
-    this.bot.chat.onRaid((channel, user, raidinfo, msg) => {
-      /* Map(20) {
-        'badge-info' => '',
-        'badges' => '',
-        'color' => '',
-        'display-name' => 'amoralsongs',
-        'emotes' => '',
-        'flags' => '',
-        'id' => '4cb0902e-2587-4c43-a4cf-b80aa6c680a3',
-        'login' => 'amoralsongs',
-        'mod' => '0',
-        'msg-id' => 'raid',
-        'msg-param-displayName' => 'amoralsongs',
-        'msg-param-login' => 'amoralsongs',
-        'msg-param-profileImageURL' => 'https://static-cdn.jtvnw.net/user-default-pictures-uv/dbdc9198-def8-11e9-8681-784f43822e80-profile_image-70x70.png',
-        'msg-param-viewerCount' => '1',
-        'room-id' => '128644134',
-        'subscriber' => '0',
-        'system-msg' => '1 raiders from amoralsongs have joined!',
-        'tmi-sent-ts' => '1607379330274',
-        'user-id' => '584160819',
-        'user-type' => ''
-      } */
-
-      const to = this.channels.find(c => c.id === msg.tags.get('room-id'))
-      const from = this.channels.find(c => c.id === msg.tags.get('user-id'))
-
-      if (!from || !to) return
-
-      this.raidsRepository.create({ to, from }).save()
-    })
+    this.bot.chat.onJoin(onJoin)
+    this.bot.chat.onRaid(onRaid)
+    this.bot.chat.onMessage(onMessage)
   }
 
   private async getCommands() {
