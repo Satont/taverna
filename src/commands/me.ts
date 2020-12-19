@@ -13,6 +13,6 @@ export default new class extends BotCommand {
     const thisChannel = user.messages.find(instance => instance.channel.id === context.msg.channelId)
     const totalMessages = user.messages.reduce((previous, current) => previous + current.count, 0)
 
-    context.say(`Сообщений на этом канале: ${thisChannel.count}, всего сообщений в сообществе: ${totalMessages}`)
+    context.say(`@${context.msg.userInfo.displayName} сообщений на этом канале: ${thisChannel.count}, всего сообщений в сообществе: ${totalMessages}`)
   }
 }
