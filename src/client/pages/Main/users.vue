@@ -1,12 +1,6 @@
 <template>
-<v-container>
-    <v-row
-      v-masonry
-      origin-left="true"
-      horizontal-order="true"
-      transition-duration="0.3s"
-      item-selector=".item"
-    >
+  <v-container>
+    <v-row v-masonry origin-left="true" horizontal-order="true" transition-duration="0.3s" item-selector=".item" v-if="usersLoaded">
       <v-col v-masonry-tile class="item" v-for="channel of users" v-bind:key="channel._id" xs="3" sm="6" md="4" lg="3">
         <v-card max-width="374">
             <v-img height="250" :src="channel.profile_image_url"></v-img>
@@ -33,6 +27,9 @@
           </v-card>
       </v-col>
     </v-row>
+    <div class="text-center">
+      <v-progress-circular size="100" align="center" indeterminate color="primary" />
+    </div>
   </v-container>
 </template>
 
