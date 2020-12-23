@@ -11,6 +11,11 @@ const router = new Router({
       name: 'Players',
       component: () => import('../pages/Main/index.vue'),
     },
+    {
+      path: '/errors/:title',
+      name: 'DynamicError',
+      component: () => import('../pages/Errors/dynamic.vue'),
+    },
   ],
   linkActiveClass,
 })
