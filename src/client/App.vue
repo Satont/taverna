@@ -10,11 +10,12 @@
     </span>
     <v-toolbar-title style="cursor: pointer" @click="$router.push('/')">{{ $store.state.meta.display_name }}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <!-- <v-tabs right color="#fff" class="my-navbar" active-class="active-tab">
-      <v-tab :to="{ name: 'Players' }">qwe</v-tab>
-    </v-tabs> -->
     <v-toolbar-items class="hidden-xs-only">
       <v-btn text v-for="item in menu" :key="item.title" :to="item.path">{{ item.title }}</v-btn>
+      <v-btn text v-if="!$store.state.user" href="/auth/twitch">Войти</v-btn>
+    </v-toolbar-items>
+    <v-toolbar-items v-if="$store.state.user">
+      <MiniProfile />
     </v-toolbar-items>
   </v-app-bar>
 
@@ -41,13 +42,19 @@
 </style>
 
 <script lang="ts">
-import  { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Mixins } from 'vue-property-decorator'
+import { Permissions } from './libs/permissions'
+import MiniProfile from './pages/Users/miniProfile.vue'
 
-@Component
-export default class extends Vue {
+@Component({
+  components: {
+    MiniProfile,
+  }
+})
+export default class extends Mixins(Permissions) {
   sidebar = false
   menu = [
-    { path: '/', title: 'Главная' }
+    /* { path: '/', title: 'Главная' } */
   ]
 }
 </script>

@@ -19,6 +19,11 @@ const bootstrap = async () => {
     store.dispatch('loadTournaments'),
   ]) */
 
+  try {
+    await store.dispatch('loadUser')
+  // eslint-disable-next-line no-empty
+  } catch {}
+
   await Promise.all([
     store.dispatch('loadMeta'),
   ])

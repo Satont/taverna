@@ -18,6 +18,10 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async loadUser({ commit }) {
+      const { data } = await axios.get('auth/me')
+      commit('set.user', data)
+    },
     async loadMeta({ commit }) {
       const { data } = await axios.get('api/team')
       commit('set.meta', data)
