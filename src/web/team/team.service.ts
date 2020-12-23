@@ -1,13 +1,29 @@
 import { Injectable } from '@nestjs/common'
 import { TeamWithUsers, HelixStream, HelixUser } from 'twitch'
+import { getRepository } from 'typeorm'
+import { Raid } from '../../entities/Raid'
+import { UserMessages } from '../../entities/UserMessages'
 import twitch from '../../twitch'
 
 @Injectable()
 export class TeamService {
+  private readonly userMessagesRepository = getRepository(UserMessages)
+  private readonly raidsRepository = getRepository(Raid)
+
   async getMeta() {
     const team = await twitch.bot?.api.kraken.teams.getTeamByName(process.env.TWITCH_TEAMNAME)
+    const totalMessages = (await this.userMessagesRepository.createQueryBuilder('row').select('SUM(row.count)', 'count').getRawOne())?.count ?? 0
+    const totalRaids = await this.raidsRepository.count()
 
-    return (team as any)._data as TeamWithUsers
+    const stats = {
+      messages: totalMessages,
+      raids: totalRaids,
+    }
+
+    return {
+      ...(team as any)._data as TeamWithUsers,
+      stats,
+    }
   }
 
   async getTeamUsers(): Promise<Array<HelixUser & { stream: HelixStream }>> {
