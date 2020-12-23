@@ -32,7 +32,6 @@ export class TwitchStrategy extends PassportStrategy(Strategy, 'twitch') {
   }
 
   async validate(accessToken: string) {
-    console.log('asdasdasdasd', accessToken)
     const { data } = await this.http.get('https://api.twitch.tv/helix/users', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
