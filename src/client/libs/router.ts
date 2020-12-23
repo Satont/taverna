@@ -8,8 +8,18 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Players',
+      name: 'Main',
       component: () => import('../pages/Main/index.vue'),
+    },
+    {
+      path: '/profile/:id',
+      name: 'UserProfile',
+      component: () => import('../pages/Users/profile.vue'),
+    },
+    {
+      path: '/errors/:title',
+      name: 'DynamicError',
+      component: () => import('../pages/Errors/dynamic.vue'),
     },
   ],
   linkActiveClass,
