@@ -28,7 +28,7 @@
           </v-card>
       </v-col>
     </v-row>
-    <div class="text-center">
+    <div class="text-center" v-else>
       <v-progress-circular size="100" align="center" indeterminate color="primary" />
     </div>
   </v-container>
@@ -53,11 +53,9 @@ export default class extends Vue {
   }
 
   async mounted() {
-    const { data: users } = await axios.get("/api/team/users")
+    const { data: users } = await axios.get('/api/team/users')
     this.users = users
     this.usersLoaded = true
-
-    ;(this as any).$redrawVueMasonry()
   }
 }
 </script>
