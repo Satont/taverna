@@ -14,7 +14,9 @@
     "dev:web": "webpack --config webpack.ts --watch --progress",
     "prestart": "npm run migration:up",
     "migration:create": "typeorm migration:generate -p -n",
-    "migration:up": "typeorm migration:run"
+    "migration:up": "typeorm migration:run",
+    "eslint": "eslint --ext .ts src",
+    "eslint:fix": "npx eslint --ext .ts --fix src"
   },
   "author": "Satont <satontworldwide@gmail.com>",
   "license": "ISC",
@@ -61,6 +63,8 @@
     "@types/mini-css-extract-plugin": "^1.2.2",
     "@types/node": "^14.14.14",
     "@types/terser-webpack-plugin": "^5.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.1",
     "css-minimizer-webpack-plugin": "^1.1.5",

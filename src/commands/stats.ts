@@ -12,7 +12,7 @@ export default new class extends BotCommand {
 
     const channel = await getRepository(Channel)
       .findOne(context.msg.channelId, {
-        relations: ['raided', 'raids']
+        relations: ['raided', 'raids'],
       })
 
     const todayRaided = channel.raided.filter(raid => {

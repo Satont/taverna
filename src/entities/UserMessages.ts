@@ -8,7 +8,7 @@ export class UserMessages extends BaseEntity {
   id!: number
 
   @Column({ default: 0 })
-  count: number = 0
+  count = 0
 
   @ManyToOne(() => User)
   user: User

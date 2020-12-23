@@ -44,12 +44,12 @@ class Twitch {
       refreshToken: tokenData.refreshToken,
       onRefresh: async ({ accessToken, refreshToken }) => {
         await this.tokenRepository.update({
-          type: TokenType.BOT
+          type: TokenType.BOT,
         }, {
           accessToken,
           refreshToken,
         })
-      }
+      },
     })
 
     const api = new ApiClient({ authProvider })

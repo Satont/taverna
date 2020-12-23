@@ -21,6 +21,6 @@ export default new Vuex.Store({
     async loadMeta({ commit }) {
       const { data } = await axios.get('api/team')
       commit('set.meta', data)
-    }
+    },
   },
 })
