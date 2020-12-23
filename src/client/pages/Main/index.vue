@@ -16,9 +16,9 @@
         </v-card>
       </v-col>
     </v-row>
-    <div>
+    <v-row>
       <Users />
-    </div>
+    </v-row>
   </v-container>
 </template>
 
