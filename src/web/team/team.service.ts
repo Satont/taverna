@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { TeamWithUsers, HelixStream, HelixUser } from 'twitch'
 import { getRepository } from 'typeorm'
+import { Channel } from '../../entities/Channel'
 import { Raid } from '../../entities/Raid'
 import { UserMessages } from '../../entities/UserMessages'
 import twitch from '../../twitch'
 
 @Injectable()
 export class TeamService {
+  private readonly channelRepository = getRepository(Channel)
   private readonly userMessagesRepository = getRepository(UserMessages)
   private readonly raidsRepository = getRepository(Raid)
 
@@ -35,5 +37,56 @@ export class TeamService {
       ...(u as any)._data,
       stream: ((streams.data.find(s => s.userId === u.id) as any))?._data ?? null,
     }))
+  }
+
+  async getUser(id: string) {
+    const [user, channel] = await Promise.all([
+      twitch.bot?.api.helix.users.getUserById(id),
+      this.channelRepository.findOne(id),
+    ])
+    const [
+      totalMessages = { count: 0 },
+      top10MessengersDB,
+    ] = await Promise.all([
+      this.userMessagesRepository
+        .createQueryBuilder('row')
+        .select('SUM(row.count)', 'count')
+        .where({ channel: channel.id })
+        .getRawOne(),
+
+      this.userMessagesRepository.find({
+        where: { channel },
+        take: 10,
+        order: { count: 'DESC' },
+        relations: ['user'],
+      }),
+    ])
+
+    const top10Messengers = (await twitch.bot?.api.helix.users.getUsersByIds(top10MessengersDB.map(u => u.user.id)))
+      ?.map(user => ({
+        ...(user as any)._data,
+        messages: top10MessengersDB.find(u => u.user.id === user.id).count,
+      }))
+
+    return {
+      user: (user as any)?._data,
+      channel: {
+        ...channel,
+        messages: {
+          total: totalMessages.count,
+          top10: top10Messengers,
+        },
+        raids: {
+          total: {
+            incoming: 0,
+            outcoming: 0,
+          },
+          top10: {
+            incoming: {},
+            outComing: {},
+          },
+        },
+      },
+    }
   }
 }

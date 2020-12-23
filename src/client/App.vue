@@ -8,7 +8,7 @@
     <span class="hidden-sm-and-up">
       <v-app-bar-nav-icon @click="sidebar = !sidebar"></v-app-bar-nav-icon>
     </span>
-    <v-toolbar-title>{{ $store.state.meta.display_name }}</v-toolbar-title>
+    <v-toolbar-title style="cursor: pointer" @click="$router.push('/')">{{ $store.state.meta.display_name }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <!-- <v-tabs right color="#fff" class="my-navbar" active-class="active-tab">
       <v-tab :to="{ name: 'Players' }">qwe</v-tab>
