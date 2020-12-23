@@ -10,6 +10,7 @@ async function bootstrap() {
     return setTimeout(() => bootstrap(), 100);
   }
   import('./twitch')
+  ;(await import('./web')).bootstrap()
 }
 
 bootstrap()

@@ -55,7 +55,7 @@ class Twitch {
     const api = new ApiClient({ authProvider })
     const me = await api.helix.users.getMe()
 
-    for (const channel of await (await api.kraken.teams.getTeamByName('sad_inside')).getUsers()) {
+    for (const channel of await (await api.kraken.teams.getTeamByName(process.env.TWITCH_TEAMNAME)).getUsers()) {
       const c = await this.channelRepository.findOne(channel.id) || this.channelRepository.create({ id: channel.id })
       c.username = channel.name
       await c.save()

@@ -2,3 +2,5 @@ node_modules
 tests.ts
 .env
 dist
+public/dest
+public/index.html
