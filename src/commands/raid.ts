@@ -24,8 +24,8 @@ export default new class extends BotCommand {
         'raids',
         '"raids"."toId" = "channel"."id" and ("raids"."createdAt" > :startOfDay AND "raids"."createdAt" < :endOfDay)',
         {
-          startOfDay: dayjs().startOf('day').valueOf(),
-          endOfDay: dayjs().endOf('day').valueOf(),
+          startOfDay: dayjs().startOf('day').toDate(),
+          endOfDay: dayjs().endOf('day').toDate(),
         }
       )
       .addSelect('channel.id', 'id')
