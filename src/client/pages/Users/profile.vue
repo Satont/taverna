@@ -27,7 +27,7 @@
           <v-card-title>
             Топ 10 общительных
             <v-spacer />
-            {{ user.channel.messages.total }}
+            <v-icon>{{ icons.mdiEmail }}</v-icon> {{ user.channel.messages.total }}
           </v-card-title>
           <v-card-text>
             <v-list>
@@ -67,7 +67,10 @@
                 <v-list-item-content>
                   <v-list-item-title>{{ raid.login }}</v-list-item-title>
                 </v-list-item-content>
-                <v-list-item-action>{{ dayjs().to(dayjs(raid.date)) }}</v-list-item-action>
+                <v-list-item-action>
+                  <span v-if="raid.viewers">{{ raid.viewers }} <v-icon>{{ icons.mdiEye }} </v-icon></span>
+                  {{ dayjs().to(dayjs(raid.date)) }}
+                </v-list-item-action>
               </v-list-item>
             </v-list>
           </v-card-text>
@@ -76,10 +79,19 @@
         <v-col>
         <v-card class="col-10" elevation="10">
           <v-card-title>
-            Coming soon...
+            Статистика
           </v-card-title>
           <v-card-text>
-            
+            <v-list max-height="450px" style="overflow: auto">
+              <v-list-item>
+                <v-list-item-content>Входящих рейдов</v-list-item-content>
+                <v-list-item-action>{{ user.channel.raids.total.incoming }}</v-list-item-action>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>Исходящих рейдов</v-list-item-content>
+                <v-list-item-action>{{ user.channel.raids.total.outcoming }}</v-list-item-action>
+              </v-list-item>
+            </v-list>
           </v-card-text>
         </v-card>
         </v-col>
@@ -96,6 +108,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import axios from 'axios'
 import day from 'dayjs'
+import { mdiEye, mdiEmail } from '@mdi/js'
 
 @Component
 export default class extends Vue {
@@ -105,6 +118,10 @@ export default class extends Vue {
   }
   loaded = false
   dayjs = day
+  icons = {
+    mdiEye,
+    mdiEmail,
+  }
 
   mounted() {
     this.load()

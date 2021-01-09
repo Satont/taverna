@@ -92,8 +92,8 @@ export class TeamService {
         },
         raids: {
           total: {
-            incoming: 0,
-            outcoming: 0,
+            incoming: await this.raidsRepository.count({ to: { id } }),
+            outcoming: await this.raidsRepository.count({ from: { id } }),
           },
           top10: {
             incoming: {},
@@ -103,6 +103,7 @@ export class TeamService {
             const channel = latestRaidersTo.find(user => user.userId === raid.from.id)
             return {
               date: raid.createdAt,
+              viewers: raid.viewers,
               ...channel,
             }
           }),

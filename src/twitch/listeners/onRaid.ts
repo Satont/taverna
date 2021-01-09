@@ -10,6 +10,7 @@ export const onRaid = (channel: string, user: string, raidinfo: ChatRaidInfo, ms
   const from = twitch.channels.find(c => c.id === msg.tags.get('user-id'))
 
   if (!from || !to) return
-
-  raidRepository.create({ to, from }).save()
+  
+  const viewers = raidinfo.viewerCount
+  raidRepository.create({ to, from, viewers }).save()
 }

@@ -1,4 +1,4 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm'
+import { Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, Column } from 'typeorm'
 import { Channel } from './Channel'
 
 @Entity('raids')
@@ -14,4 +14,7 @@ export class Raid extends BaseEntity {
 
   @ManyToOne(() => Channel)
   to: Channel
+
+  @Column({ nullable: true })
+  viewers: number
 }
