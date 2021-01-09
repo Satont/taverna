@@ -4,6 +4,13 @@ import vuetify from './libs/vuetify'
 import store from './libs/vuex'
 import App from './App.vue'
 
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/ru'
+
+dayjs.extend(relativeTime)
+dayjs.locale('ru')
+
 const bootstrap = async () => {
   /* try {
     const { data: user } = await axios.get('/auth/me')

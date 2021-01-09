@@ -40,9 +40,15 @@ export class TeamService {
   }
 
   async getUser(id: string) {
-    const [user, channel] = await Promise.all([
+    const [user, channel, latestRaidsTo] = await Promise.all([
       twitch.bot?.api.helix.users.getUserById(id),
       this.channelRepository.findOne(id),
+      this.raidsRepository.find({ 
+        where: { to: { id } },
+        take: 100,
+        order: { createdAt: 'DESC' },
+        relations: ['from'],
+      }),
     ])
     const [
       totalMessages = { count: 0 },
@@ -68,6 +74,14 @@ export class TeamService {
         messages: top10MessengersDB.find(u => u.user.id === user.id).count,
       }))
 
+    const latestRaidersTo = (await twitch.bot?.api.helix.users
+      .getUsersByIds(latestRaidsTo.map(raid => raid.from.id).filter((value, index, array) => array.indexOf(value) === index)))
+      .map(user => ({
+        username: user.name,
+        avatar: user.profilePictureUrl,
+        id: user.id,
+      }))
+
     return {
       user: (user as any)?._data,
       channel: {
@@ -85,6 +99,13 @@ export class TeamService {
             incoming: {},
             outComing: {},
           },
+          latestTo: latestRaidsTo.map(raid => {
+            const channel = latestRaidersTo.find(user => user.id === raid.from.id)
+            return {
+              date: raid.createdAt,
+              ...channel,
+            }
+          }),
         },
       },
     }

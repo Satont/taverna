@@ -21,7 +21,9 @@
         </v-row>
       </v-img>
       <v-card-text>
-        <v-card class="col-md-3 col-12" elevation="10">
+        <v-row dense>
+        <v-col>
+        <v-card class="col-10" elevation="10">
           <v-card-title>
             Топ 10 общительных
             <v-spacer />
@@ -41,6 +43,38 @@
             </v-list>
           </v-card-text>
         </v-card>
+        </v-col>
+        <v-col>
+        <v-card class="col-10" elevation="10">
+          <v-card-title>
+            Последние рейдеры
+          </v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item v-for="raid of user.channel.raids.latestTo" v-bind:key="raid.createdAt">
+                <v-list-item-avatar>
+                  <v-img :src="raid.avatar"></v-img>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{ raid.username }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>{{ dayjs().to(dayjs(raid.date)) }}</v-list-item-action>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+        </v-card>
+        </v-col>
+        <v-col>
+        <v-card class="col-10" elevation="10">
+          <v-card-title>
+            Coming soon...
+          </v-card-title>
+          <v-card-text>
+            
+          </v-card-text>
+        </v-card>
+        </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
     <div class="text-center" v-else>
@@ -52,6 +86,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import axios from 'axios'
+import day from 'dayjs'
 
 @Component
 export default class extends Vue {
@@ -60,6 +95,7 @@ export default class extends Vue {
     channel: {},
   }
   loaded = false
+  dayjs = day
 
   async mounted() {
     this.user = (await axios.get(`/api/team/users/${this.$route.params.id}`)).data
