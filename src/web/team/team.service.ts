@@ -77,9 +77,9 @@ export class TeamService {
     const latestRaidersTo = (await twitch.bot?.api.helix.users
       .getUsersByIds(latestRaidsTo.map(raid => raid.from.id).filter((value, index, array) => array.indexOf(value) === index)))
       .map(user => ({
-        username: user.name,
-        avatar: user.profilePictureUrl,
-        id: user.id,
+        login: user.name,
+        profile_image_url: user.profilePictureUrl,
+        userId: user.id,
       }))
 
     return {
@@ -100,7 +100,7 @@ export class TeamService {
             outComing: {},
           },
           latestTo: latestRaidsTo.map(raid => {
-            const channel = latestRaidersTo.find(user => user.id === raid.from.id)
+            const channel = latestRaidersTo.find(user => user.userId === raid.from.id)
             return {
               date: raid.createdAt,
               ...channel,

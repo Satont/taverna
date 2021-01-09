@@ -50,13 +50,22 @@
             Последние рейдеры
           </v-card-title>
           <v-card-text>
-            <v-list>
-              <v-list-item v-for="raid of user.channel.raids.latestTo" v-bind:key="raid.createdAt">
+            <v-list max-height="450px" style="overflow: auto">
+              <v-list-item 
+                v-for="raid of user.channel.raids.latestTo" 
+                link 
+                @click="$router.push({
+                  name: 'UserProfile', 
+                  params: { id: raid.userId } }, 
+                  () => reload = true
+                );" 
+                v-bind:key="raid.createdAt"
+              >
                 <v-list-item-avatar>
-                  <v-img :src="raid.avatar"></v-img>
+                  <v-img :src="raid.profile_image_url"></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{ raid.username }}</v-list-item-title>
+                  <v-list-item-title>{{ raid.login }}</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>{{ dayjs().to(dayjs(raid.date)) }}</v-list-item-action>
               </v-list-item>
@@ -84,7 +93,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import axios from 'axios'
 import day from 'dayjs'
 
@@ -97,9 +106,18 @@ export default class extends Vue {
   loaded = false
   dayjs = day
 
-  async mounted() {
+  mounted() {
+    this.load()
+  }
+
+  async load() {
     this.user = (await axios.get(`/api/team/users/${this.$route.params.id}`)).data
     this.loaded = true
+  }
+
+  @Watch('$route')
+  onUrlChange() {
+    this.load()
   }
 }
 </script>
