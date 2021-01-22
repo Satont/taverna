@@ -40,14 +40,20 @@ export class TeamService {
   }
 
   async getUser(id: string) {
-    const [user, channel, latestRaidsTo] = await Promise.all([
+    const [user, channel, latestRaidsTo, latestRaidsFrom] = await Promise.all([
       twitch.bot?.api.helix.users.getUserById(id),
       this.channelRepository.findOne(id),
-      this.raidsRepository.find({ 
+      this.raidsRepository.find({
         where: { to: { id } },
         take: 100,
         order: { createdAt: 'DESC' },
         relations: ['from'],
+      }),
+      this.raidsRepository.find({ 
+        where: { from: { id } },
+        take: 100,
+        order: { createdAt: 'DESC' },
+        relations: ['from', 'to'],
       }),
     ])
     const [
@@ -74,13 +80,11 @@ export class TeamService {
         messages: top10MessengersDB.find(u => u.user.id === user.id).count,
       }))
 
-    const latestRaidersTo = (await twitch.bot?.api.helix.users
-      .getUsersByIds(latestRaidsTo.map(raid => raid.from.id).filter((value, index, array) => array.indexOf(value) === index)))
-      .map(user => ({
-        login: user.name,
-        profile_image_url: user.profilePictureUrl,
-        userId: user.id,
-      }))
+    const neededTwitchUsers = await twitch.bot?.api.helix.users
+      .getUsersByIds([
+        ...latestRaidsTo.map(raid => raid.from.id),
+        ...latestRaidsFrom.map(raid => raid.from.id),
+      ].filter((value, index, array) => array.indexOf(value) === index))
 
     return {
       user: (user as any)?._data,
@@ -100,11 +104,25 @@ export class TeamService {
             outComing: {},
           },
           latestTo: latestRaidsTo.map(raid => {
-            const channel = latestRaidersTo.find(user => user.userId === raid.from.id)
+            const channel = neededTwitchUsers.find(user => user.id === raid.from.id)
             return {
-              date: raid.createdAt,
-              viewers: raid.viewers,
-              ...channel,
+              ...raid,
+              channel: {
+                login: channel?.name,
+                profile_image_url: channel?.profilePictureUrl,
+                userId: channel?.id,
+              },
+            }
+          }),
+          latestFrom: latestRaidsFrom.map(raid => {
+            const channel = neededTwitchUsers.find(user => user.id === raid.to.id)
+            return {
+              ...raid,
+              channel: {
+                login: channel?.name,
+                profile_image_url: channel?.profilePictureUrl,
+                userId: channel?.id,
+              },
             }
           }),
         },

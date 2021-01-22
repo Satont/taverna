@@ -23,58 +23,26 @@
       <v-card-text>
         <v-row dense>
         <v-col>
-        <v-card class="col-10" elevation="10">
-          <v-card-title>
-            Топ 10 общительных
-            <v-spacer />
-            <v-icon>{{ icons.mdiEmail }}</v-icon> {{ user.channel.messages.total }}
-          </v-card-title>
-          <v-card-text>
-            <v-list>
-              <v-list-item v-for="user of user.channel.messages.top10" v-bind:key="user.id">
-                <v-list-item-avatar>
-                  <v-img :src="user.profile_image_url"></v-img>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ user.login }}</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>{{ user.messages }}</v-list-item-action>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
-        </v-col>
-        <v-col>
-        <v-card class="col-10" elevation="10">
-          <v-card-title>
-            Последние рейдеры
-          </v-card-title>
-          <v-card-text>
-            <v-list max-height="450px" style="overflow: auto">
-              <v-list-item 
-                v-for="raid of user.channel.raids.latestTo" 
-                link 
-                @click="$router.push({
-                  name: 'UserProfile', 
-                  params: { id: raid.userId } }, 
-                  () => reload = true
-                );" 
-                v-bind:key="raid.createdAt"
-              >
-                <v-list-item-avatar>
-                  <v-img :src="raid.profile_image_url"></v-img>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ raid.login }}</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <span v-if="raid.viewers">{{ raid.viewers }} <v-icon>{{ icons.mdiEye }} </v-icon></span>
-                  {{ dayjs().to(dayjs(raid.date)) }}
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
+          <v-card class="col-10" elevation="10">
+            <v-card-title>
+              Топ 10 общительных
+              <v-spacer />
+              <v-icon>{{ icons.mdiEmail }}</v-icon> {{ user.channel.messages.total }}
+            </v-card-title>
+            <v-card-text>
+              <v-list>
+                <v-list-item v-for="user of user.channel.messages.top10" v-bind:key="user.id">
+                  <v-list-item-avatar>
+                    <v-img :src="user.profile_image_url"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ user.login }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>{{ user.messages }}</v-list-item-action>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
         </v-col>
         <v-col>
         <v-card class="col-10" elevation="10">
@@ -94,6 +62,72 @@
             </v-list>
           </v-card-text>
         </v-card>
+        </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col>
+          <v-card class="col-10" elevation="10">
+            <v-card-title>
+              Последние рейдеры
+            </v-card-title>
+            <v-card-text>
+              <v-list max-height="450px" style="overflow: auto">
+                <v-list-item 
+                  v-for="raid of user.channel.raids.latestTo" 
+                  link 
+                  @click="$router.push({
+                    name: 'UserProfile', 
+                    params: { id: raid.from.id } }, 
+                    () => reload = true
+                  );" 
+                  v-bind:key="raid.createdAt"
+                >
+                  <v-list-item-avatar>
+                    <v-img :src="raid.channel.profile_image_url || twitchDefaultAvatar"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ raid.channel.login || raid.from.username }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <span v-if="raid.viewers">{{ raid.viewers }} <v-icon>{{ icons.mdiEye }} </v-icon></span>
+                    {{ dayjs().to(dayjs(raid.date)) }}
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card class="col-10" elevation="10">
+            <v-card-title>
+              Последние рейды
+            </v-card-title>
+            <v-card-text>
+              <v-list max-height="450px" style="overflow: auto">
+                <v-list-item 
+                  v-for="raid of user.channel.raids.latestFrom" 
+                  link 
+                  @click="$router.push({
+                    name: 'UserProfile', 
+                    params: { id: raid.to.id } }, 
+                    () => reload = true
+                  );" 
+                  v-bind:key="raid.createdAt"
+                >
+                 <v-list-item-avatar>
+                    <v-img :src="raid.channel.profile_image_url || twitchDefaultAvatar"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ raid.channel.login || raid.to.username }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <span v-if="raid.viewers">{{ raid.viewers }} <v-icon>{{ icons.mdiEye }} </v-icon></span>
+                    {{ dayjs().to(dayjs(raid.date)) }}
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
         </v-col>
         </v-row>
       </v-card-text>
@@ -122,6 +156,7 @@ export default class extends Vue {
     mdiEye,
     mdiEmail,
   }
+  twitchDefaultAvatar = 'https://static-cdn.jtvnw.net/user-default-pictures-uv/ead5c8b2-a4c9-4724-b1dd-9f00b46cbd3d-profile_image-70x70.png'
 
   mounted() {
     this.load()
