@@ -80,7 +80,7 @@
                     params: { id: raid.from.id } }, 
                     () => reload = true
                   );" 
-                  v-bind:key="raid.createdAt"
+                  v-bind:key="raid.id"
                 >
                   <v-list-item-avatar>
                     <v-img :src="raid.channel.profile_image_url || twitchDefaultAvatar"></v-img>
@@ -90,7 +90,7 @@
                   </v-list-item-content>
                   <v-list-item-action>
                     <span v-if="raid.viewers">{{ raid.viewers }} <v-icon>{{ icons.mdiEye }} </v-icon></span>
-                    {{ dayjs().to(dayjs(raid.date)) }}
+                    {{ dayjs().to(dayjs(raid.createdAt)) }}
                   </v-list-item-action>
                 </v-list-item>
               </v-list>
@@ -112,7 +112,7 @@
                     params: { id: raid.to.id } }, 
                     () => reload = true
                   );" 
-                  v-bind:key="raid.createdAt"
+                  v-bind:key="raid.id"
                 >
                  <v-list-item-avatar>
                     <v-img :src="raid.channel.profile_image_url || twitchDefaultAvatar"></v-img>
@@ -122,7 +122,7 @@
                   </v-list-item-content>
                   <v-list-item-action>
                     <span v-if="raid.viewers">{{ raid.viewers }} <v-icon>{{ icons.mdiEye }} </v-icon></span>
-                    {{ dayjs().to(dayjs(raid.date)) }}
+                    {{ dayjs().to(dayjs(raid.createdAt)) }}
                   </v-list-item-action>
                 </v-list-item>
               </v-list>
