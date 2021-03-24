@@ -9,7 +9,15 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" md="9">
+      <v-col cols="12" md="3">
+        <v-card>
+          <v-card-title>Последние рейды</v-card-title>
+          <v-card-text>
+            <LatestRaids />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="6">
         <v-card>
           <v-card-title>О сообществе</v-card-title>
           <v-card-text v-html="$store.state.meta.info" />
@@ -27,11 +35,13 @@ import { Vue, Component } from 'vue-property-decorator'
 import axios from 'axios'
 import Stats from './stats.vue'
 import Users from './users.vue'
+import LatestRaids from './latestRaids.vue'
 
 @Component({
   components: {
     Stats,
     Users,
+    LatestRaids
   }
 })
 export default class extends Vue {}

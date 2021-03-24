@@ -87,7 +87,7 @@ class Twitch {
       await newChannel.save()
       this.channels.push(newChannel)
       this.bot.chat.join(channel.name)
-      this.bot.api.helix.users.createFollow(me.id, channel.id)
+      this.bot.api.helix.users.createFollow(me.id, channel.id).catch((e) => console.error(e.message))
     }
 
     const noMoreInGroup = this.channels.filter(channel => {
