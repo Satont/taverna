@@ -78,7 +78,7 @@ export class TeamService {
       ?.map(user => ({
         ...(user as any)._data,
         messages: top10MessengersDB.find(u => u.user.id === user.id).count,
-      })).sort((a, b) => a.messages - b.mesages)
+      })).sort((a, b) => a.messages - b.messages)
 
     const neededTwitchUsers = await twitch.bot?.api.helix.users
       .getUsersByIds([
