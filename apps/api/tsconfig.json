@@ -1,9 +1,11 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "esnext",
+    "target": "es6",
     "module": "commonjs",
     "declaration": true,
+    "outDir": "./dist",
     "strict": false,
     "esModuleInterop": true,
     "inlineSourceMap": true,
@@ -11,5 +13,6 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true
   },
-  "include": ["apps", "libs"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
