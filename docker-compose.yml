@@ -1,0 +1,10 @@
+version: '3.2'
+
+services:
+  api:
+    restart: always
+    env_file:
+      - .env
+    build:
+      context: .
+      target: api

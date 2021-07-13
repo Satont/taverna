@@ -1,9 +1,0 @@
-{
-  "watch": ["src"],
-  "exec": "npm run build:app; NODE_ENV=development npm run start",
-  "ext": "ts",
-  "ignore": [
-    "src/migrations/**",
-    "src/client"
-  ]
-}
