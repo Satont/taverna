@@ -385,8 +385,8 @@
       "projectFolder": "apps/web"
     },
     {
-      "packageName": "@taverna/api",
-      "projectFolder": "apps/api"
+      "packageName": "@taverna/backend",
+      "projectFolder": "apps/backend"
     },
     {
       "packageName": "@taverna/typeorm",

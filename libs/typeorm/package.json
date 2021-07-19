@@ -2,8 +2,8 @@
   "name": "@taverna/typeorm",
   "version": "0.0.1",
   "scripts": {
-    "build": "tsc",
-    "typeorm": "typeorm migration:run",
+    "build": "rm -rf dist; tsc",
+    "typeorm": "typeorm",
     "migration:run": "typeorm migration:run"
   },
   "types": "dist/index.d.ts",

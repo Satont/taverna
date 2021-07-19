@@ -13,6 +13,6 @@ const opts: UserVuetifyPreset = {
   },
 };
 
-const instance = new Vuetify();
+const instance = new Vuetify(opts);
 
 export default instance;

@@ -71,15 +71,10 @@
                   <v-list-item
                     v-for="raid of user.channel.raids.latestTo"
                     link
-                    @click="
-                      $router.push(
-                        {
-                          name: 'UserProfile',
-                          params: { id: raid.from.id },
-                        },
-                        () => (reload = true),
-                      )
-                    "
+                    :to="{
+                      name: 'UserProfile',
+                      params: { id: raid.from.id },
+                    }"
                     v-bind:key="raid.id"
                   >
                     <v-list-item-avatar>
@@ -107,15 +102,10 @@
                   <v-list-item
                     v-for="raid of user.channel.raids.latestFrom"
                     link
-                    @click="
-                      $router.push(
-                        {
-                          name: 'UserProfile',
-                          params: { id: raid.to.id },
-                        },
-                        () => (reload = true),
-                      )
-                    "
+                    :to="{
+                      name: 'UserProfile',
+                      params: { id: raid.to.id },
+                    }"
                     v-bind:key="raid.id"
                   >
                     <v-list-item-avatar>
@@ -151,7 +141,7 @@ import day from 'dayjs';
 import { mdiEye, mdiEmail } from '@mdi/js';
 
 @Component
-export default class extends Vue {
+export default class Profile extends Vue {
   user = {
     user: {} as any,
     channel: {} as any,

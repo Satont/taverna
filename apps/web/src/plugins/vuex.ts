@@ -1,20 +1,20 @@
 import axios from 'axios';
-import { TeamWithUsers, HelixUser } from '@twurple/api';
+import { TeamWithUsers, HelixUserData } from '@twurple/api';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '../libs/api';
 Vue.use(Vuex);
 
 export interface State {
-  meta: TeamWithUsers;
-  user: HelixUser;
+  meta: Record<string, any>;
+  user: HelixUserData;
 }
 
 export default new Vuex.Store({
   state: {
-    meta: {} as TeamWithUsers,
+    meta: {},
     user: undefined,
-  },
+  } as State,
   mutations: {
     'set.meta'(state, payLoad) {
       state.meta = payLoad;

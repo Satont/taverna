@@ -21,6 +21,20 @@
 
       <v-divider></v-divider>
 
+      <v-list nav dense v-if="isInCommunity()">
+        <v-list-item-group v-model="selectedMenuItem" color="primary">
+          <v-list-item v-for="(item, i) in menu" :key="i" :to="{ name: item.name }">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="item.text"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+
       <v-card-actions>
         <v-spacer />
         <v-btn text color="red darken-1" href="/api/auth/logout">Выйти</v-btn>
@@ -30,10 +44,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Component, Mixins } from 'vue-property-decorator';
+import { mdiCalendarMultiple } from '@mdi/js';
+import { Permissions } from '../../libs/permissions';
 
 @Component
-export default class minipProfile extends Vue {
+export default class MiniProfile extends Mixins(Permissions) {
   profile = false;
+  selectedMenuItem = 0;
+
+  menu = [{ text: 'Events', icon: mdiCalendarMultiple, name: 'EventsList' }];
+
+  get() {}
 }
 </script>
