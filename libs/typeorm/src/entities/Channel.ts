@@ -1,4 +1,5 @@
-import { Entity, Column, BaseEntity, PrimaryColumn, OneToMany } from 'typeorm';
+import { Entity, Column, BaseEntity, PrimaryColumn, OneToMany, ManyToMany } from 'typeorm';
+import { Event } from './Event';
 import { Raid } from './Raid';
 import { UserMessages } from './UserMessages';
 
@@ -21,4 +22,10 @@ export class Channel extends BaseEntity {
 
   @OneToMany(() => UserMessages, (messages) => messages.channel)
   messages: UserMessages[];
+
+  @OneToMany(() => Event, (event) => event.author)
+  createdEvents: Event[];
+
+  @ManyToMany(() => Event, (event) => event.participants)
+  events: Event[];
 }

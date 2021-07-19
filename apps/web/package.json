@@ -10,6 +10,7 @@
     "@mdi/js": "^5.9.55",
     "axios": "^0.21.1",
     "dayjs": "^1.10.6",
+    "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",
     "vue": "^2.6.12",
     "vue-class-component": "^7.2.6",
@@ -20,7 +21,9 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@taverna/typeorm": "~0.0.1",
     "@twurple/api": "^5.0.0-pre.11",
+    "@types/lodash": "^4.14.171",
     "@types/node": "^15.0.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.21.0",
