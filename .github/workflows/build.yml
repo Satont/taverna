@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 14
       - name: Install rush
-        run: npm i -g rush
+        run: npm i -g @microsoft/rush
       - name: Install dependencies
         run: rush update
       - name: Build
