@@ -5,10 +5,11 @@ WORKDIR /transpile
 COPY package.json tsconfig.json .
 COPY packages/backend/package.json packages/backend/package.json
 COPY packages/web/package.json packages/web/package.json 
-RUN npm install yarn@1.22.11 -g
-RUN yarn install --pure-lockfile
-COPY packages/ packages/
+RUN ls
+RUN npm install yarn@1.22.11 -g --force
 COPY libs/ libs/
+RUN yarn install
+COPY packages/ packages/
 RUN yarn build
 
 # SERVICE
