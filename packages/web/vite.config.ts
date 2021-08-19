@@ -1,12 +1,9 @@
 import { createVuePlugin } from 'vite-plugin-vue2';
 import { defineConfig } from 'vite';
-import ViteComponents from 'vite-plugin-components';
 
 import dotenv from 'dotenv';
 
 dotenv.config({ path: '../../.env' });
-
-console.log(process.env.VITE_API_URL);
 
 export default defineConfig({
   plugins: [createVuePlugin() /* , ViteComponents({ transformer: 'vue2' }) */],

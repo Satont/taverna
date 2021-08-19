@@ -1,10 +1,10 @@
 import { RefreshableAuthProvider, StaticAuthProvider, ClientCredentialsAuthProvider } from 'twitch-auth';
 import { ApiClient } from 'twitch';
-import { getRepository } from 'typeorm';
+import { getConnection, getRepository, Repository } from 'typeorm';
 import gl from 'glob';
 import { Bot, BotCommand } from 'easy-twitch-bot';
 
-import { Channel, Raid, Token, TokenType } from '@taverna/typeorm';
+import { Channel, Token, TokenType } from '@taverna/typeorm';
 import { promisify } from 'util';
 import { resolve } from 'path';
 import { onJoin } from './listeners/onJoin';
@@ -12,9 +12,8 @@ import { onRaid } from './listeners/onRaid';
 import { onMessage } from './listeners/onMessage';
 
 class Twitch {
-  private readonly tokenRepository = getRepository(Token);
-  private readonly channelRepository = getRepository(Channel);
-  private readonly raidsRepository = getRepository(Raid);
+  private readonly tokenRepository = getRepository(Token)
+  private readonly channelRepository = getRepository(Channel)
 
   channels: Channel[] = [];
   bot: Bot = null;
@@ -29,6 +28,7 @@ class Twitch {
 
   private async init() {
     try {
+      console.log(this.channelRepository.metadata.connection.options.entities)
       const clientId = process.env.TWITCH_CLIENTID;
       const clientSecret = process.env.TWITCH_CLIENTSECRET;
       this.api = new ApiClient({ authProvider: new ClientCredentialsAuthProvider(clientId, clientSecret) });
@@ -67,7 +67,7 @@ class Twitch {
         api.helix.users.createFollow(me.id, c.id);
       }
 
-      this.bot = new Bot(api as any, {
+      this.bot = new Bot(api, {
         channels: this.channels.map((c) => c.username),
         commands: await this.getCommands(),
         prefix: process.env.BOT_PREFIX || 't!',
@@ -88,9 +88,13 @@ class Twitch {
       const me = await this.bot?.api?.helix.users.getMe();
 
       for (const channel of channels) {
-        if (this.channels.some((c) => c.id === channel.id)) {
+        const currentChannel = this.channels.find(c => c.id === channel.id)
+        if (currentChannel) {
           this.channelRepository.update({ id: channel.id }, { username: channel.name });
           continue;
+        }
+        if (currentChannel && currentChannel.username !== channel.name) {
+          this.bot.chat.join(channel.name)
         }
         const newChannel = await this.channelRepository.create({ id: channel.id, username: channel.name }).save();
         this.channels.push(newChannel);
@@ -136,4 +140,5 @@ class Twitch {
   }
 }
 
-export default new Twitch();
+const twitch = new Twitch()
+export default twitch;
