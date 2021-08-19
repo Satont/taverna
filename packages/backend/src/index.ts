@@ -13,7 +13,7 @@ async function bootstrap() {
   const connectionOptions = await getConnectionOptions();
   await createConnection({
     ...connectionOptions,
-    entities: ['../../libs/typeorm/dist/entities/*.js'],
+    entities: ['../../libs/typeorm/dist/src/entities/*.js'],
   });
   if (!getConnection().isConnected) {
     return setTimeout(() => bootstrap(), 100);
