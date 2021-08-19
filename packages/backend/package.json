@@ -8,7 +8,7 @@
     "build": "tsc -b",
     "start": "node dist/index.js",
     "dev": "nodemon",
-    "prestart": "ts-node src/tools/migration.ts",
+    "prestart": "node dist/tools/migration.ts",
     "debug": "node --inspect=0.0.0.0:9229 --nolazy ./dist/index.js"
   },
   "author": "Satont <satontworldwide@gmail.com>",
