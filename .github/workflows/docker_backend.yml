@@ -1,4 +1,4 @@
-name: Publish Backend To Docker
+name: Publish Backend to quay.io
 
 on:
   push:
