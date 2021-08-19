@@ -9,9 +9,7 @@ import { Intents } from 'discord.js';
       token: process.env.DISCORD_BOT_TOKEN,
       commandPrefix: process.env.BOT_PREFIX,
       usePipes: [TransformPipe, ValidationPipe],
-      ws: {
-        intents: Intents.ALL,
-      },
+      intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES],
     }),
   ],
   providers: [BotGateway],
