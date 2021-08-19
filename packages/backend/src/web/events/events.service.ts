@@ -72,7 +72,10 @@ export class EventsService {
         embed.addField('Дата проведения', dayjs(event.date).format('L LT'), true);
       }
 
-      channel.send(`<@&${process.env.DISCORD_BOT_ROLEID}>`, { embed });
+      channel.send({
+        content: `<@&${process.env.DISCORD_BOT_ROLEID}>`,
+        embeds: [embed]
+      });
     }
 
     return event;
