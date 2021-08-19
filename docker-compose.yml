@@ -2,18 +2,12 @@ version: '3.2'
 
 services:
   backend:
-    restart: always
+    image: quay.io/taverna/backend
     env_file:
       - .env
-    build:
-      context: .
-      target: backend
   web:
-    restart: always
+    image: quay.io/taverna/web
     env_file:
       - .env
-    build:
-      context: .
-      target: web
     ports:
-      - 4000:80
+      - 5001:80

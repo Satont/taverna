@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+  backend:
+    restart: always
+    env_file:
+      - .env
+    build:
+      context: .
+      target: backend
+  web:
+    restart: always
+    env_file:
+      - .env
+    build:
+      context: .
+      target: web
+    ports:
+      - 4000:80
