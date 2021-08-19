@@ -12,9 +12,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Install rush
-        run: npm i -g @microsoft/rush
+      - name: Install yarn
+        run: npm install yarn@1.22.11 -g --force
       - name: Install dependencies
-        run: rush update
+        run: yarn install
       - name: Build
-        run: rush build
+        run: yarn build
