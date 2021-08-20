@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { BotCommand, BotCommandContext } from 'easy-twitch-bot';
-import { getRepository } from 'typeorm';
-import { Channel } from '@taverna/typeorm';
+import { Channel, typeorm } from '@taverna/typeorm';
 import twitch from '../index';
 
 class Command extends BotCommand {
@@ -10,7 +9,7 @@ class Command extends BotCommand {
   async execute(params: string[], context: BotCommandContext) {
     if (!twitch.channels.some((c) => c.id === context.msg.userInfo.userId)) return;
 
-    const channel = await getRepository(Channel).findOne(context.msg.channelId, {
+    const channel = await typeorm.getRepository(Channel).findOne(context.msg.channelId, {
       relations: ['raided', 'raids'],
     });
 
