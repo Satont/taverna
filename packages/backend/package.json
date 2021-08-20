@@ -39,8 +39,7 @@
     "source-map-support": "^0.5.19",
     "twitch": "^4.3.6",
     "twitch-auth": "^4.3.6",
-    "twitch-chat-client": "^4.3.6",
-    "typeorm": "^0.2.29"
+    "twitch-chat-client": "^4.3.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.1",

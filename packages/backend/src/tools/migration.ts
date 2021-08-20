@@ -22,6 +22,7 @@ function bootstrap() {
     });
 
     command.on('close', () => {
+      console.info('✔ Migration is done.')
       res(true);
     });
   });

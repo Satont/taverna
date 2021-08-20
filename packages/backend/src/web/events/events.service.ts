@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { getRepository, getConnection, MoreThanOrEqual } from 'typeorm';
-import { Event } from '@taverna/typeorm';
+import { Event, typeorm } from '@taverna/typeorm';
 import { EventsList } from './validations/EventsList';
 import { Client, DiscordClientProvider } from 'discord-nestjs';
 import { MessageEmbed, TextChannel } from 'discord.js';
@@ -8,7 +7,7 @@ import { dayjs } from '../../helpers/dayjs';
 
 @Injectable()
 export class EventsService {
-  private readonly repository = getRepository(Event);
+  private readonly repository = typeorm.getRepository(Event);
   @Client()
   private readonly discordClient: DiscordClientProvider;
 
@@ -29,7 +28,7 @@ export class EventsService {
   }
 
   getUpcomingEvents() {
-    return this.repository.find({ where: { date: MoreThanOrEqual(new Date().toISOString()) } });
+    return this.repository.find({ where: { date: typeorm.MoreThanOrEqual(new Date().toISOString()) } });
   }
 
   getEvent(id: string | number) {
@@ -37,11 +36,11 @@ export class EventsService {
   }
 
   joinInEvent(eventId: string, channelId: string) {
-    return getConnection().createQueryBuilder().relation(Event, 'participants').of(eventId).add(channelId);
+    return typeorm.getConnection().createQueryBuilder().relation(Event, 'participants').of(eventId).add(channelId);
   }
 
   partFromEvent(eventId: string, channelId: string) {
-    return getConnection().createQueryBuilder().relation(Event, 'participants').of(eventId).remove(channelId);
+    return typeorm.getConnection().createQueryBuilder().relation(Event, 'participants').of(eventId).remove(channelId);
   }
 
   async create(data: Partial<Event>, authorId: string) {
@@ -49,7 +48,7 @@ export class EventsService {
     const newEvent = await this.repository.create({ ...query, active: true, author: { id: authorId } }).save();
 
     if (participants?.length) {
-      await getConnection().createQueryBuilder().relation(Event, 'participants').of(newEvent.id).add(participants);
+      await typeorm.getConnection().createQueryBuilder().relation(Event, 'participants').of(newEvent.id).add(participants);
     }
 
     const event = await this.getEvent(newEvent.id);
@@ -85,7 +84,7 @@ export class EventsService {
     const { participants, ...query } = data;
     const event = await this.repository.findOne({ where: { id: data.id, author: { id: authorId } }, relations: ['participants'] });
     await this.repository.update(event.id, query);
-    await getConnection().createQueryBuilder().relation(Event, 'participants').of(data.id).addAndRemove(participants, event.participants);
+    await typeorm.getConnection().createQueryBuilder().relation(Event, 'participants').of(data.id).addAndRemove(participants, event.participants);
 
     return await this.getEvent(event.id);
   }

@@ -1,10 +1,9 @@
 import { PrivateMessage } from 'twitch-chat-client';
-import { getRepository } from 'typeorm';
 import twitch from '..';
-import { User, UserMessages } from '@taverna/typeorm';
+import { User, UserMessages, typeorm } from '@taverna/typeorm';
 
-const userRepository = getRepository(User);
-const userMessagesRepository = getRepository(UserMessages);
+const userRepository = typeorm.getRepository(User);
+const userMessagesRepository = typeorm.getRepository(UserMessages);
 
 export const onMessage = async (_channel: string, _use: string, _message: string, msg: PrivateMessage) => {
   const channel = twitch.channels.find((c) => c.id === msg.channelId);

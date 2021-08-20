@@ -3,19 +3,14 @@ import dotenv from 'dotenv';
 import find from 'find-up';
 
 dotenv.config({ path: find.sync('.env') });
-
-import { createConnection, getConnection, getConnectionOptions } from 'typeorm';
+import { createConnection, typeorm } from '@taverna/typeorm'
 import 'reflect-metadata';
 import 'source-map-support/register';
 import './helpers/dayjs';
 
 async function bootstrap() {
-  const connectionOptions = await getConnectionOptions();
-  await createConnection({
-    ...connectionOptions,
-    entities: ['../../libs/typeorm/dist/src/entities/*.js'],
-  });
-  if (!getConnection().isConnected) {
+  await createConnection()
+  if (!typeorm.getConnection().isConnected) {
     return setTimeout(() => bootstrap(), 100);
   }
 

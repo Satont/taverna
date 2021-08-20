@@ -1,10 +1,10 @@
 import { BotCommand, BotCommandContext } from 'easy-twitch-bot';
-import { getRepository } from 'typeorm';
+import { typeorm } from '@taverna/typeorm';
 import { User } from '@taverna/typeorm';
 
 class Command extends BotCommand {
   name = 'me';
-  private readonly repository = getRepository(User);
+  private readonly repository = typeorm.getRepository(User);
 
   async execute(params: string[], context: BotCommandContext) {
     const user = await this.repository.findOne(context.msg.userInfo.userId, { relations: ['messages', 'messages.channel'] });
