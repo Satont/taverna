@@ -10,18 +10,14 @@ async function bootstrap() {
       migrations: ['../../libs/typeorm/dist/src/migrations/*.js'],
     })
 
-    const executor = new typeorm.MigrationExecutor(connection)
-    const migrations = await executor.getPendingMigrations()
-
-    for (const migration of migrations) {
-      console.info(`Executing ${migration.name}`)
-      await executor.executeMigration(migration)
-    }
+    await connection.runMigrations()
+    console.info('✔ Migration successful.')
   } catch (error) {
     console.error('🔴 Migration failed.')
     console.error(error)
     process.exit(1)
   }
+
 }
 
 bootstrap();
