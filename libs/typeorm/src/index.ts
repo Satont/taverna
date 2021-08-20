@@ -18,10 +18,10 @@ import { Event } from './entities/Event';
 
 export const entities = [Channel, Raid, Session, Token, User, UserMessages, Event]
 
-export const createConnection = async () => {
+export const createConnection = async (options?: Partial<TORM.ConnectionOptions>) => {
   const connectionOptions = await TORM.getConnectionOptions();
 
-  return TORM.createConnection(Object.assign(connectionOptions, { entities }));
+  return TORM.createConnection(Object.assign(connectionOptions, { entities, ...options }));
 }
 
 export const typeorm = TORM

@@ -1,31 +1,27 @@
-import { spawn } from 'child_process';
 import dotenv from 'dotenv';
 import findup from 'find-up';
+import { typeorm, createConnection } from '@taverna/typeorm'
 
 dotenv.config({ path: findup.sync('.env') });
 
-function bootstrap() {
-  return new Promise((res, rej) => {
-    const command = spawn('npx', ['typeorm', 'migration:run'], {
-      shell: true,
-      env: {
-        ...process.env,
-        TYPEORM_ENTITIES: '../../libs/typeorm/dist/entities/*.js',
-        TYPEORM_MIGRATIONS: '../../libs/typeorm/dist/migrations/*.js',
-        TYPEORM_ENTITIES_DIR: '../../libs/typeorm/src/entities',
-        TYPEORM_MIGRATIONS_DIR: '../../libs/typeorm/src/migrations',
-      },
-    });
+async function bootstrap() {
+  try {
+    const connection = await createConnection({
+      migrations: ['../../libs/typeorm/dist/src/migrations/*.js'],
+    })
 
-    command.on('error', (e) => {
-      throw e;
-    });
+    const executor = new typeorm.MigrationExecutor(connection)
+    const migrations = await executor.getPendingMigrations()
 
-    command.on('close', () => {
-      console.info('✔ Migration is done.')
-      res(true);
-    });
-  });
+    for (const migration of migrations) {
+      console.info(`Executing ${migration.name}`)
+      await executor.executeMigration(migration)
+    }
+  } catch (error) {
+    console.error('🔴 Migration failed.')
+    console.error(error)
+    process.exit(1)
+  }
 }
 
 bootstrap();
