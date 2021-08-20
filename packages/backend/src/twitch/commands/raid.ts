@@ -1,6 +1,5 @@
 import { BotCommand, BotCommandContext } from 'easy-twitch-bot';
-import { getRepository } from 'typeorm';
-import { Channel } from '@taverna/typeorm';
+import { Channel, typeorm } from '@taverna/typeorm';
 import dayjs from 'dayjs';
 import twitch from '../index';
 import { take } from 'lodash';
@@ -19,7 +18,7 @@ class Command extends BotCommand {
         .getAll()
     ).filter((c) => c.userId !== context.msg.channelId);
 
-    const channels: Array<{ id: string; username: string; raided: string }> = await getRepository(Channel)
+    const channels: Array<{ id: string; username: string; raided: string }> = await typeorm.getRepository(Channel)
       .createQueryBuilder('channel')
       .leftJoin(
         'raids',

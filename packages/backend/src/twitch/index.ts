@@ -1,6 +1,6 @@
 import { RefreshableAuthProvider, StaticAuthProvider, ClientCredentialsAuthProvider } from 'twitch-auth';
 import { ApiClient } from 'twitch';
-import { getConnection, getRepository, Repository } from 'typeorm';
+import { typeorm } from '@taverna/typeorm';
 import gl from 'glob';
 import { Bot, BotCommand } from 'easy-twitch-bot';
 
@@ -12,8 +12,8 @@ import { onRaid } from './listeners/onRaid';
 import { onMessage } from './listeners/onMessage';
 
 class Twitch {
-  private readonly tokenRepository = getRepository(Token)
-  private readonly channelRepository = getRepository(Channel)
+  private readonly tokenRepository = typeorm.getRepository(Token)
+  private readonly channelRepository = typeorm.getRepository(Channel)
 
   channels: Channel[] = [];
   bot: Bot = null;

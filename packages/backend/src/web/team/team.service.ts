@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { TeamWithUsers, HelixStream, HelixUserData } from 'twitch';
-import { getRepository } from 'typeorm';
-import { Channel, Raid, UserMessages } from '@taverna/typeorm';
+import { Channel, Raid, UserMessages, typeorm } from '@taverna/typeorm';
 import twitch from '../../twitch';
 
 @Injectable()
 export class TeamService {
-  private readonly channelRepository = getRepository(Channel);
-  private readonly userMessagesRepository = getRepository(UserMessages);
-  private readonly raidsRepository = getRepository(Raid);
+  private readonly channelRepository = typeorm.getRepository(Channel);
+  private readonly userMessagesRepository = typeorm.getRepository(UserMessages);
+  private readonly raidsRepository = typeorm.getRepository(Raid);
 
   async getMeta() {
     const team = await twitch.api.kraken.teams.getTeamByName(process.env.TWITCH_TEAMNAME);

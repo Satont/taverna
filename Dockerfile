@@ -2,14 +2,14 @@
 FROM node:16.7.0-alpine3.11 as base_transpile
 RUN apk add --no-cache git protoc
 WORKDIR /transpile
-COPY package.json tsconfig.json .
+COPY package.json tsconfig.json yarn.lock .
 COPY packages/backend/package.json packages/backend/package.json
 COPY packages/web/package.json packages/web/package.json 
 RUN ls
 RUN npm install yarn@1.22.11 -g --force
 COPY libs/ libs/
-RUN yarn install
 COPY packages/ packages/
+RUN yarn install
 RUN yarn build
 
 # SERVICE

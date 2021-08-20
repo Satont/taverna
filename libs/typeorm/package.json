@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "connect-typeorm": "^1.1.4",
-    "typeorm": "^0.2.34"
+    "typeorm": "^0.2.37"
   }
 }

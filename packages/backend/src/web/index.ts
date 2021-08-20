@@ -5,8 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import passport from 'passport';
 import { TypeormStore } from 'connect-typeorm';
-import { getRepository } from 'typeorm';
-import { Session } from '@taverna/typeorm';
+import { Session, typeorm } from '@taverna/typeorm';
 
 export async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -26,7 +25,7 @@ export async function bootstrap() {
       store: new TypeormStore({
         cleanupLimit: 2,
         ttl: 86400,
-      }).connect(getRepository(Session)),
+      }).connect(typeorm.getRepository(Session)),
     }),
   );
 

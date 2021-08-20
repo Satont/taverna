@@ -1,9 +1,8 @@
 import { ChatRaidInfo, UserNotice } from 'twitch-chat-client/lib';
-import { getRepository } from 'typeorm';
 import twitch from '..';
-import { Raid } from '@taverna/typeorm';
+import { Raid , typeorm } from '@taverna/typeorm';
 
-const raidRepository = getRepository(Raid);
+const raidRepository = typeorm.getRepository(Raid);
 
 export const onRaid = (channel: string, user: string, raidinfo: ChatRaidInfo, msg: UserNotice) => {
   const to = twitch.channels.find((c) => c.id === msg.tags.get('room-id'));
